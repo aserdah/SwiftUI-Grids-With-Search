@@ -18,47 +18,56 @@ struct GridsView: View {
             
             ScrollView{
                 HStack{
-                HStack{
-                    
-                    TextField("Search Item", text: $searchText)
-                    .padding(.leading ,24)
-
-                }
-                .padding()
-                .background(Color(.systemGray5))
-                .cornerRadius(6)
-                .padding(.horizontal,20)
-                .onTapGesture(perform: {
-                    isSearching = true
-                })
-                .overlay(
                     HStack{
-    
-                        Image(systemName:"magnifyingglass")
-                        Spacer()
-                        if isSearching || searchText.isEmpty == false {
-                            Button(action: {
-                                searchText = ""
-                                isSearching = false
-                                
-                            }, label: {
-                                Image(systemName:"xmark.circle.fill")
-                            })
-                        }
+                        
+                        TextField("Search Item", text: $searchText)
+                            .padding(.leading ,24)
                         
                     }
-                    .padding(.horizontal,32)
-                    .foregroundColor(.gray)
-                )
-                    if isSearching || searchText.isEmpty == false{
-                    Button(action: {
-                        searchText = ""
-                        isSearching = false
-                        
-                    }, label: {
-                        Text("Cancel")
+                    .padding()
+                    .background(Color(.systemGray5))
+                    .cornerRadius(6)
+                    .padding(.horizontal,20)
+                    .onTapGesture(perform: {
+                        isSearching = true
                     })
-                    .padding(.trailing,20)
+                    .overlay(
+                        HStack{
+                            
+                            Image(systemName:"magnifyingglass")
+                            Spacer()
+                            if isSearching || searchText.isEmpty == false {
+                                Button(action: {
+                                    searchText = ""
+                                    isSearching = false
+                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder)
+                                        , to: nil, from: nil, for: nil)
+                                    
+                                }, label: {
+                                    Image(systemName:"xmark.circle.fill")
+                                })
+                            }
+                            
+                        }
+                        .padding(.horizontal,32)
+                        .foregroundColor(.gray)
+                    )
+                    .transition(.move(edge: .trailing))
+                    .animation(.easeInOut)
+                    if isSearching || searchText.isEmpty == false{
+                        Button(action: {
+                            searchText = ""
+                            isSearching = false
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder)
+                                , to: nil, from: nil, for: nil)
+                            
+                        }, label: {
+                            Text("Cancel")
+                        })
+                        .padding(.trailing)
+                        .padding(.leading,-12)
+                        .transition(.move(edge: .trailing))
+                        .animation(.easeInOut)
                     }
                     
                 }
@@ -68,12 +77,12 @@ struct GridsView: View {
                     GridItem(.flexible(minimum: 50, maximum: 200),spacing: 16,alignment: .top),
                     GridItem(.flexible(minimum: 50, maximum: 200),spacing: 16)
                 ],alignment:.leading, spacing: 16,content:
-                 
+                    
                     /*@START_MENU_TOKEN@*/{
                         ForEach(vm.results.filter({$0.name.contains(searchText)||searchText.isEmpty}),id:\.self) { app  in
                             info(app: app)
                         }
-                   
+                        
                     }/*@END_MENU_TOKEN@*/).padding(.horizontal,12)
                 
             }

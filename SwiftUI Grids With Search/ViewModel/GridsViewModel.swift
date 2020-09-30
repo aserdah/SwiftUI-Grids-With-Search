@@ -7,7 +7,7 @@
 import SwiftUI
 
 class GridsViewModel: ObservableObject {
-   @Published var results = [ResultModel]()
+    @Published var results = [ResultModel]()
     
     init() {
         guard let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/apple-music/coming-soon/all/50/explicit.json") else {
@@ -16,7 +16,7 @@ class GridsViewModel: ObservableObject {
         
         URLSession.shared.dataTask(with: url) { (data, resp, error) in
             
-          
+            
             guard let data = data else{
                 return
             }
@@ -24,7 +24,7 @@ class GridsViewModel: ObservableObject {
             do{
                 let rss = try JSONDecoder().decode(RssModel.self ,from:data)
                 DispatchQueue.main.async {
-                self.results = rss.feed.results
+                    self.results = rss.feed.results
                 }
             }
             catch{
@@ -33,7 +33,7 @@ class GridsViewModel: ObservableObject {
             
         }.resume()
         
-       
+        
     }
-  
+    
 }
